@@ -7,10 +7,13 @@ yum install -y wget
 wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
 
 # Installs additional repos
-yum local install -y mysql57-community-release-el7-9.noarch.rpm
+yum localinstall -y mysql57-community-release-el7-9.noarch.rpm
 
 # Installs mysql server
 yum install -y mysql-server
+
+# Start mysql
+systemctl start mysqld
 
 # Get mysql temp pass
 TEMP_PW=$(grep 'temporary password' /var/log/mysqld.log|awk '{print$11}')
@@ -29,13 +32,13 @@ yum install -y httpd
 chkconfig --levels 235 httpd on
 yum install -y php
 yum install -y php-mysql
-yum -y install php-gd php-imap php-ldap php-odbc php-pear php-xml php-xmlrpc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy curl curl-devel
+yum install -y php-gd php-imap php-ldap php-odbc php-pear php-xml php-xmlrpc php-mbstring php-mcrypt php-mssql php-snmp php-soap php-tidy curl curl-devel
 yum install -y epel-release
 wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 yum localinstall -y remi-release-7.rpm
 yum install -y yum-utils
 yum-config-manager --enable remi-php56
-yum install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
+yum install -y php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
 
 # Install Wordpress
 wget http://wordpress.org/latest.tar.gz
@@ -47,5 +50,9 @@ curl -o wp-config.php https://raw.githubusercontent.com/mrbyrd16/scripts/master/
 
 cp -r ./* /var/www/html
 
+# Mod firewall
 firewall-cmd --zone=public --add-port=80/tcp --permanent 
 firewall-cmd --reload
+
+# start httpd
+systemctl start httpd
