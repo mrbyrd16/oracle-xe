@@ -1,5 +1,4 @@
-#! /bin/bash
-#Create log directory
+reate log directory
 mkdir /xe_logs
 
 # Download preinstall RPM
@@ -23,7 +22,9 @@ rm -rf oracle-database-xe-18c-1.0-1.x86_64.rpm
 
 export ORACLE_SID=XE
 export ORACLE_ASK=NO
-. oraenv
+export ORACLE_HOME=/opt/oracle/product/18c/dbhomeXE/
+export PATH=$ORACLE_HOME/bin:$PATH
+#. oraenv
 
 ## Install SQL Plus Client
 #curl -o oracle-instantclient-basic-21.3.0.0.0-1.x86_64.rpm https://download.oracle.com/otn_software/linux/instantclient/213000/oracle-instantclient-basic-21.3.0.0.0-1.x86_64.rpm
@@ -36,7 +37,16 @@ curl -o apex_21.1_en.zip https://download.oracle.com/otn_software/apex/apex_21.1
 unzip apex_21.1_en.zip
 
 # Change to APEX directory
-cd apex
+#cd apex
+
+# Create Apex DBF directory
+#mkdir /apex
+#chmod 777 /apex
 
 ## Enter SQLPlus
-#sqlplus /nolol
+sqlplus sys/password@//localhost:1521/XE as sysdba
+
+## Download ORDS
+curl -o ords-21.2.4.243.1032.zip https://download.oracle.com/otn_software/java/ords/ords-21.2.4.243.1032.zip
+
+
